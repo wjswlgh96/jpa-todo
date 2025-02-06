@@ -3,6 +3,9 @@ package com.example.jpa_todo.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Entity
 @Table(name = "schedule")
@@ -15,22 +18,31 @@ public class Schedule extends BaseEntity {
     @Column(nullable = false)
     private String title;
 
-    @Column(columnDefinition = "longtext")
+    @Column(nullable = false, columnDefinition = "longtext")
     private String contents;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
+
     public Schedule() {}
 
     public Schedule(String title, String contents) {
         this.title = title;
         this.contents = contents;
+        this.comments = new ArrayList<>();
     }
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public void addComment(Comment comment) {
+        comments.add(comment);
+        comment.setSchedule(this);
     }
 
     public void updateTitleAndContents(String title, String contents) {

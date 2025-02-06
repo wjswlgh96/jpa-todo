@@ -27,6 +27,9 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Schedule> schedules;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
+
     public User() {}
 
     public User(String username, String email, String password) {
@@ -34,11 +37,17 @@ public class User extends BaseEntity {
         this.email = email;
         this.password = password;
         this.schedules = new ArrayList<>();
+        this.comments = new ArrayList<>();
     }
 
     public void addSchedule(Schedule schedule) {
         schedules.add(schedule);
         schedule.setUser(this);
+    }
+
+    public void addComment(Comment comment) {
+        comments.add(comment);
+        comment.setUser(this);
     }
 
     public void updatePassword(String newPassword) {

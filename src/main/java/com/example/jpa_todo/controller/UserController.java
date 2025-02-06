@@ -1,7 +1,7 @@
 package com.example.jpa_todo.controller;
 
 import com.example.jpa_todo.common.Const;
-import com.example.jpa_todo.dto.request.user.UpdatePasswordRequestDto;
+import com.example.jpa_todo.dto.request.user.UpdateUserPasswordRequestDto;
 import com.example.jpa_todo.dto.response.user.UserResponseDto;
 import com.example.jpa_todo.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,7 +36,7 @@ public class UserController {
     @PatchMapping("/{id}")
     public ResponseEntity<Void> updatePassword(
             @PathVariable Long id,
-            @Valid @RequestBody UpdatePasswordRequestDto requestDto,
+            @Valid @RequestBody UpdateUserPasswordRequestDto requestDto,
             HttpServletRequest request
     ) {
         HttpSession session = request.getSession(false);

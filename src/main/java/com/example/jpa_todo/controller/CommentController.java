@@ -1,11 +1,11 @@
 package com.example.jpa_todo.controller;
 
 import com.example.jpa_todo.common.Const;
-import com.example.jpa_todo.dto.request.schedule.CreateScheduleRequestDto;
-import com.example.jpa_todo.dto.request.schedule.UpdateScheduleTitleAndContentsRequestDto;
-import com.example.jpa_todo.dto.response.schedule.ScheduleResponseDto;
+import com.example.jpa_todo.dto.request.comment.CreateCommentRequestDto;
+import com.example.jpa_todo.dto.request.comment.UpdateCommentContentsRequestDto;
+import com.example.jpa_todo.dto.response.comment.CommentResponseDto;
 import com.example.jpa_todo.dto.response.user.UserResponseDto;
-import com.example.jpa_todo.service.ScheduleService;
+import com.example.jpa_todo.service.CommentService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -17,45 +17,45 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/schedules")
+@RequestMapping("/comments")
 @RequiredArgsConstructor
-public class ScheduleController {
+public class CommentController {
 
-    private final ScheduleService scheduleService;
+    private final CommentService commentService;
 
     @PostMapping
-    public ResponseEntity<ScheduleResponseDto> save(
-            @Valid @RequestBody CreateScheduleRequestDto requestDto,
+    public ResponseEntity<CommentResponseDto> save(
+            @Valid @RequestBody CreateCommentRequestDto requestDto,
             HttpServletRequest request
     ) {
         HttpSession session = request.getSession(false);
         UserResponseDto sessionUser = (UserResponseDto) session.getAttribute(Const.LOGIN_USER);
-        ScheduleResponseDto responseDto = scheduleService.save(sessionUser.getId(), requestDto.getTitle(), requestDto.getContents());
+        CommentResponseDto responseDto = commentService.save(sessionUser.getId(), requestDto.getScheduleId(), requestDto.getContents());
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
     @GetMapping
-    public ResponseEntity<List<ScheduleResponseDto>> findAll() {
-        List<ScheduleResponseDto> responseDto = scheduleService.findAll();
+    public ResponseEntity<List<CommentResponseDto>> findAll() {
+        List<CommentResponseDto> responseDto = commentService.findAll();
         return ResponseEntity.ok(responseDto);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ScheduleResponseDto> findById(@PathVariable Long id) {
-        ScheduleResponseDto responseDto = scheduleService.findById(id);
+    public ResponseEntity<CommentResponseDto> findById(@PathVariable Long id) {
+        CommentResponseDto responseDto = commentService.findById(id);
         return ResponseEntity.ok(responseDto);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> updateTitleAndContents(
+    public ResponseEntity<Void> updateContents(
             @PathVariable Long id,
-            @Valid @RequestBody UpdateScheduleTitleAndContentsRequestDto requestDto,
+            @Valid @RequestBody UpdateCommentContentsRequestDto requestDto,
             HttpServletRequest request
     ) {
-        HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession();
         UserResponseDto sessionUser = (UserResponseDto) session.getAttribute(Const.LOGIN_USER);
 
-        scheduleService.updateTitleAndContents(id, sessionUser.getId(), requestDto.getTitle(), requestDto.getContents());
+        commentService.updateContents(sessionUser.getId(), id, requestDto.getContents());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -64,11 +64,10 @@ public class ScheduleController {
             @PathVariable Long id,
             HttpServletRequest request
     ) {
-        HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession();
         UserResponseDto sessionUser = (UserResponseDto) session.getAttribute(Const.LOGIN_USER);
 
-        scheduleService.delete(id, sessionUser.getId());
+        commentService.delete(sessionUser.getId(), id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 }
