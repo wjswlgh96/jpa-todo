@@ -32,8 +32,6 @@ public class ScheduleResponseDto {
                 .map(CommentResponseInScheduleDto::toDto)
                 .toList();
 
-        System.out.println("comments = " + comments);
-
         return new ScheduleResponseDto(
                 schedule.getId(),
                 schedule.getUser().getId(),

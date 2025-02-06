@@ -3,6 +3,7 @@ package com.example.jpa_todo.controller;
 import com.example.jpa_todo.common.Const;
 import com.example.jpa_todo.dto.request.schedule.CreateScheduleRequestDto;
 import com.example.jpa_todo.dto.request.schedule.UpdateScheduleTitleAndContentsRequestDto;
+import com.example.jpa_todo.dto.response.schedule.SchedulePageResponseDto;
 import com.example.jpa_todo.dto.response.schedule.ScheduleResponseDto;
 import com.example.jpa_todo.dto.response.user.UserResponseDto;
 import com.example.jpa_todo.service.ScheduleService;
@@ -10,11 +11,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/schedules")
@@ -35,8 +37,13 @@ public class ScheduleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ScheduleResponseDto>> findAll() {
-        List<ScheduleResponseDto> responseDto = scheduleService.findAll();
+    public ResponseEntity<SchedulePageResponseDto<ScheduleResponseDto>> findAll(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "modifiedAt") String sort
+    ) {
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by(sort).descending());
+        SchedulePageResponseDto<ScheduleResponseDto> responseDto = scheduleService.findAll(pageable);
         return ResponseEntity.ok(responseDto);
     }
 

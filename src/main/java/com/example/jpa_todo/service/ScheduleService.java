@@ -1,5 +1,6 @@
 package com.example.jpa_todo.service;
 
+import com.example.jpa_todo.dto.response.schedule.SchedulePageResponseDto;
 import com.example.jpa_todo.dto.response.schedule.ScheduleResponseDto;
 import com.example.jpa_todo.entity.Schedule;
 import com.example.jpa_todo.entity.User;
@@ -7,11 +8,11 @@ import com.example.jpa_todo.exception.ApplicationException;
 import com.example.jpa_todo.repository.ScheduleRepository;
 import com.example.jpa_todo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -30,11 +31,11 @@ public class ScheduleService {
         return ScheduleResponseDto.toDto(saveSchedule);
     }
 
-    public List<ScheduleResponseDto> findAll() {
-        return scheduleRepository.findAll()
-                .stream()
-                .map(ScheduleResponseDto::toDto)
-                .toList();
+    public SchedulePageResponseDto<ScheduleResponseDto> findAll(Pageable pageable) {
+        Page<ScheduleResponseDto> dtoPage = scheduleRepository.findAll(pageable)
+                .map(ScheduleResponseDto::toDto);
+
+        return SchedulePageResponseDto.toDto(dtoPage);
     }
 
     public ScheduleResponseDto findById(Long id) {
