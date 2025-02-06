@@ -7,6 +7,7 @@ import com.example.jpa_todo.dto.response.user.UserResponseDto;
 import com.example.jpa_todo.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<UserResponseDto> signUp(@RequestBody CreateUserRequestDto requestDto) {
+    public ResponseEntity<UserResponseDto> signUp(@Valid @RequestBody CreateUserRequestDto requestDto) {
         UserResponseDto responseDto = authService.signUp(
                 requestDto.getUsername(),
                 requestDto.getEmail(),
@@ -34,7 +35,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<Void> login(
-            @RequestBody LoginRequestDto requestDto,
+            @Valid @RequestBody LoginRequestDto requestDto,
             HttpServletRequest request
     ) {
         UserResponseDto user = authService.login(requestDto.getEmail(), requestDto.getPassword());

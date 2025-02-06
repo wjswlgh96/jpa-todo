@@ -3,13 +3,13 @@ package com.example.jpa_todo.service;
 import com.example.jpa_todo.dto.response.schedule.ScheduleResponseDto;
 import com.example.jpa_todo.entity.Schedule;
 import com.example.jpa_todo.entity.User;
+import com.example.jpa_todo.exception.ApplicationException;
 import com.example.jpa_todo.repository.ScheduleRepository;
 import com.example.jpa_todo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -46,7 +46,7 @@ public class ScheduleService {
     public void updateTitleAndContents(Long id, Long sessionId, String title, String contents) {
         Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(id);
         if (!findSchedule.getUser().getId().equals(sessionId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "스케줄 작성자만 수정이 가능합니다.");
+            throw new ApplicationException(HttpStatus.FORBIDDEN, "스케줄 작성자만 수정이 가능합니다.");
         }
 
         findSchedule.updateTitleAndContents(title, contents);
@@ -55,7 +55,7 @@ public class ScheduleService {
     public void delete(Long id, Long sessionId) {
         Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(id);
         if (!findSchedule.getUser().getId().equals(sessionId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "스케줄 작성자만 삭제가 가능합니다.");
+            throw new ApplicationException(HttpStatus.FORBIDDEN, "스케줄 작성자만 삭제가 가능합니다.");
         }
 
         scheduleRepository.delete(findSchedule);

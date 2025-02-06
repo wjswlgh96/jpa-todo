@@ -8,6 +8,7 @@ import com.example.jpa_todo.dto.response.user.UserResponseDto;
 import com.example.jpa_todo.service.ScheduleService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class ScheduleController {
 
     @PostMapping
     public ResponseEntity<ScheduleResponseDto> save(
-            @RequestBody CreateScheduleRequestDto requestDto,
+            @Valid @RequestBody CreateScheduleRequestDto requestDto,
             HttpServletRequest request
     ) {
         HttpSession session = request.getSession(false);
@@ -48,7 +49,7 @@ public class ScheduleController {
     @PatchMapping("/{id}")
     public ResponseEntity<Void> updateTitleAndContents(
             @PathVariable Long id,
-            @RequestBody UpdateTitleAndContentsRequestDto requestDto,
+            @Valid @RequestBody UpdateTitleAndContentsRequestDto requestDto,
             HttpServletRequest request
     ) {
         HttpSession session = request.getSession(false);
