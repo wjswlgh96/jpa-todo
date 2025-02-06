@@ -1,5 +1,6 @@
 package com.example.jpa_todo.service;
 
+import com.example.jpa_todo.config.PasswordEncoder;
 import com.example.jpa_todo.dto.response.user.UserResponseDto;
 import com.example.jpa_todo.entity.User;
 import com.example.jpa_todo.exception.ApplicationException;
@@ -16,6 +17,7 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public List<UserResponseDto> findAll() {
         return userRepository.findAll()
@@ -37,11 +39,12 @@ public class UserService {
             throw new ApplicationException(HttpStatus.FORBIDDEN, "자신의 비밀번호만 변경할 수 있습니다.");
         }
 
-        if (!findUser.getPassword().equals(oldPassword)) {
+
+        if (!passwordEncoder.matches(oldPassword, findUser.getPassword())) {
             throw new ApplicationException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
         }
 
-        findUser.updatePassword(newPassword);
+        findUser.updatePassword(passwordEncoder.encode(newPassword));
     }
 
     public void delete(Long id, Long sessionId) {
