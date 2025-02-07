@@ -59,7 +59,7 @@ public class CommentController {
     ) {
         UserResponseDto sessionUser = SessionUtil.getSessionUser(request);
         commentService.updateContents(sessionUser.getId(), id, requestDto.getContents());
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
@@ -70,6 +70,6 @@ public class CommentController {
     ) {
         UserResponseDto sessionUser = SessionUtil.getSessionUser(request);
         commentService.delete(sessionUser.getId(), id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 }

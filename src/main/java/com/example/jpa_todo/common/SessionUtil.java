@@ -5,6 +5,10 @@ import com.example.jpa_todo.exception.ApplicationException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public final class SessionUtil {    // final: 상속 방지
 
@@ -22,5 +26,17 @@ public final class SessionUtil {    // final: 상속 방지
         }
 
         return sessionUser;
+    }
+
+    public static ResponseEntity<Map<String, String>> expireSessionWithMessage(HttpServletRequest request, String message) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message", message);
+
+        return ResponseEntity.ok(response);
     }
 }

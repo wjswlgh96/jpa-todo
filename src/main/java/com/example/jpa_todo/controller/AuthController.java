@@ -35,7 +35,7 @@ public class AuthController {
                 requestDto.getEmail(),
                 requestDto.getPassword()
         );
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+        return ResponseEntity.ok(responseDto);
     }
 
     @PostMapping("/login")

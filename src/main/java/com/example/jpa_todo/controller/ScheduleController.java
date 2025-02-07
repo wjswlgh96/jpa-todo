@@ -66,7 +66,7 @@ public class ScheduleController {
     ) {
         UserResponseDto sessionUser = SessionUtil.getSessionUser(request);
         scheduleService.updateTitleAndContents(id, sessionUser.getId(), requestDto.getTitle(), requestDto.getContents());
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
@@ -77,7 +77,7 @@ public class ScheduleController {
     ) {
         UserResponseDto sessionUser = SessionUtil.getSessionUser(request);
         scheduleService.delete(id, sessionUser.getId());
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
 }

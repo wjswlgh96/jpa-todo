@@ -15,7 +15,7 @@ public class CreateCommentRequestDto {
 
     @NotBlank(message = "댓글 내용은 필수입니다.")
     @Size(max = 100, message = "댓글은 100글자를 넘길 수 없습니다.")
-    @Schema(description = "댓글 내용 입력 (필수, 최대 100자)", example = "댓글 내용 입니다!!")
+    @Schema(description = "댓글 내용 입력 (필수, 최대 100자)", example = "댓글 내용입니다!!")
     private final String contents;
 
     public CreateCommentRequestDto(Long scheduleId, String contents) {

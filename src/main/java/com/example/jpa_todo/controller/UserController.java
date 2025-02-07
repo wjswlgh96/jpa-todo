@@ -9,11 +9,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
@@ -39,24 +39,24 @@ public class UserController {
 
     @PatchMapping("/{id}")
     @Operation(summary = "비밀번호 변경", description = "특정 회원의 비밀번호를 변경합니다.")
-    public ResponseEntity<Void> updatePassword(
+    public ResponseEntity<Map<String, String>> updatePassword(
             @PathVariable Long id,
             @Valid @RequestBody UpdateUserPasswordRequestDto requestDto,
             HttpServletRequest request
     ) {
         UserResponseDto sessionUser = SessionUtil.getSessionUser(request);
         userService.updatePassword(id, sessionUser.getId(), requestDto.getOldPassword(), requestDto.getNewPassword());
-        return new ResponseEntity<>(HttpStatus.OK);
+        return SessionUtil.expireSessionWithMessage(request, "세션이 만료되었습니다. 다시 로그인해주세요.");
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "회원 삭제(회원 탈퇴)", description = "특정 회원의 정보를 삭제합니다.")
-    public ResponseEntity<Void> delete(
+    public ResponseEntity<Map<String, String>> delete(
             @PathVariable Long id,
             HttpServletRequest request
     ) {
         UserResponseDto sessionUser = SessionUtil.getSessionUser(request);
         userService.delete(id, sessionUser.getId());
-        return new ResponseEntity<>(HttpStatus.OK);
+        return SessionUtil.expireSessionWithMessage(request, "회원 탈퇴가 정상적으로 처리되었습니다.");
     }
 }
