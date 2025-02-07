@@ -13,7 +13,7 @@
 </p>
 
 ***
-## 📖 **API 문서**
+## 📖 API 문서
 [📌 Swagger 문서 보기](https://wjswlgh96.github.io/swagger-docs/#/Author%20API/createAuthor)
 
 ---
@@ -46,7 +46,6 @@
 | `PATCH`  | `/schedules/{id}` | 할일 제목 & 내용 수정 | Path:<br/>- `id`                                                                      | ```json { "title": string, "contents": string } ``` | 없음 | `200 OK` |
 | `DELETE` | `/schedules/{id}` | 할일 삭제 | Path:<br/>- `id`                                                                      | 없음                                                  | 없음 | `200 OK` |
 
-
 ---
 
 ## 🛠 Comment API
@@ -57,3 +56,45 @@
 | `GET`    | `/comments/{id}` | 특정 댓글 조회 | Path:<br/>- `id` | 없음 | ```json { "id": long, "userId": long, "scheduleId": long, "contents": string, "createdAt": string, "modifiedAt": string } ``` | `200 OK` |
 | `PATCH`  | `/comments/{id}` | 댓글 수정 | Path:<br/>- `id` | ```json { "contents": string } ``` | 없음 | `200 OK` |
 | `DELETE` | `/comments/{id}` | 댓글 삭제 | Path:<br/>- `id` | 없음 | 없음 | `200 OK` |
+
+---
+
+## 📖 SQL
+
+```mysql
+CREATE TABLE user (
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL,
+    email VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(100) NOT NULL,
+    created_at DATETIME(6),
+    modified_at DATETIME(6)
+);
+
+CREATE TABLE schedule (
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    title VARCHAR(50) NOT NULL,
+    contents LONGTEXT NOT NULL,
+    created_at DATETIME(6),
+    modified_at DATETIME(6),
+    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
+);
+
+CREATE TABLE comment (
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    schedule_id BIGINT NOT NULL,
+    contents VARCHAR(100) NOT NULL,
+    created_at DATETIME(6),
+    modified_at DATETIME(6),
+    FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
+    FOREIGN KEY (schedule_id) REFERENCES schedule(id) ON DELETE CASCADE
+);
+```
+
+---
+
+## 📖 ERD
+
+![Image](https://github.com/user-attachments/assets/436b420c-ea51-43e5-819e-4843c9819999)

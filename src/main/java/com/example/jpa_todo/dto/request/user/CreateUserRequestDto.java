@@ -26,9 +26,9 @@ public class CreateUserRequestDto {
     @NotBlank(message = "비밀번호는 필수값입니다.")
     @Pattern(
             regexp = Const.PASSWORD_PATTERN,
-            message = "비밀번호는 4~12 자리만 가능하며, 최소 하나의 대문자와 하나의 특수문자(!, @, #, $, %, ^, &, *)를 포함해야 합니다."
+            message = "비밀번호는 4~16 자리만 가능하며, 최소 하나의 대문자와 하나의 특수문자(!, @, #, $, %, ^, &, *)를 포함해야 합니다."
     )
-    @Schema(description = "유저의 비밀번호 (필수)", example = "비밀번호는 4~12 자리만 가능하며, 최소 하나의 대문자와 하나의 특수문자(!, @, #, $, %, ^, &, *)를 포함해야 합니다.")
+    @Schema(description = "유저의 비밀번호 (필수)", example = "비밀번호는 4~16 자리만 가능하며, 최소 하나의 대문자와 하나의 특수문자(!, @, #, $, %, ^, &, *)를 포함해야 합니다.")
     private final String password;
 
     public CreateUserRequestDto(String username, String email, String password) {
