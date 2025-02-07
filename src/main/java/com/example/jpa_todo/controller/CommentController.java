@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +32,7 @@ public class CommentController {
     ) {
         UserResponseDto sessionUser = SessionUtil.getSessionUser(request);
         CommentResponseDto responseDto = commentService.save(sessionUser.getId(), requestDto.getScheduleId(), requestDto.getContents());
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+        return ResponseEntity.ok(responseDto);
     }
 
     @GetMapping
