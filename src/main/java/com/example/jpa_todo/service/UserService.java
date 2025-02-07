@@ -39,9 +39,12 @@ public class UserService {
             throw new ApplicationException(HttpStatus.FORBIDDEN, "자신의 비밀번호만 변경할 수 있습니다.");
         }
 
-
         if (!passwordEncoder.matches(oldPassword, findUser.getPassword())) {
             throw new ApplicationException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
+        }
+
+        if (passwordEncoder.matches(newPassword, findUser.getPassword())) {
+            throw new ApplicationException(HttpStatus.BAD_REQUEST, "새 비밀번호는 기존 비밀번호와 달라야 합니다.");
         }
 
         findUser.updatePassword(passwordEncoder.encode(newPassword));

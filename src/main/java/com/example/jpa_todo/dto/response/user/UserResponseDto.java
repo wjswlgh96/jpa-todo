@@ -1,6 +1,7 @@
 package com.example.jpa_todo.dto.response.user;
 
 import com.example.jpa_todo.entity.User;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -10,10 +11,13 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class UserResponseDto {
 
+    @Schema(example = "1")
     private final Long id;
 
+    @Schema(example = "홍길동")
     private final String username;
 
+    @Schema(example = "hong@example.com")
     private final String email;
 
     private final LocalDateTime createdAt;

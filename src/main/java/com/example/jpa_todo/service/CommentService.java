@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -22,6 +23,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final ScheduleRepository scheduleRepository;
+
 
     public CommentResponseDto save(Long sessionId, Long scheduleId, String contents) {
         User findUser = userRepository.findByIdOrElseThrow(sessionId);
@@ -67,4 +69,5 @@ public class CommentService {
 
         commentRepository.delete(findComment);
     }
+
 }

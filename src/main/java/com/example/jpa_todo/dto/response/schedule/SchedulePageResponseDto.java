@@ -1,5 +1,6 @@
 package com.example.jpa_todo.dto.response.schedule;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -11,9 +12,17 @@ import java.util.List;
 public class SchedulePageResponseDto<T> {
 
     private final List<T> content;
+
+    @Schema(example = "10")
     private final int size;
+
+    @Schema(example = "1")
     private final int number;
+
+    @Schema(example = "1")
     private final long totalElements;
+
+    @Schema(example = "1")
     private final int totalPages;
 
     public static <T> SchedulePageResponseDto<T> toDto(Page<T> page) {
