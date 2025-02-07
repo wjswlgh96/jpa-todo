@@ -4,6 +4,7 @@ import com.example.jpa_todo.common.Const;
 import com.example.jpa_todo.dto.request.user.CreateUserRequestDto;
 import com.example.jpa_todo.dto.request.user.LoginRequestDto;
 import com.example.jpa_todo.dto.response.user.UserResponseDto;
+import com.example.jpa_todo.exception.ApplicationException;
 import com.example.jpa_todo.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -44,8 +45,23 @@ public class AuthController {
             HttpServletRequest request
     ) {
         UserResponseDto user = authService.login(requestDto.getEmail(), requestDto.getPassword());
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute(Const.LOGIN_USER) != null) {
+            throw new ApplicationException(HttpStatus.BAD_REQUEST, "이미 로그인된 상태입니다.");
+        }
+
+        session = request.getSession(true);
         session.setAttribute(Const.LOGIN_USER, user);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/logout")
+    @Operation(summary = "로그아웃", description = "유저 로그 아웃")
+    public ResponseEntity<Void> logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        return ResponseEntity.ok().build();
     }
 }
