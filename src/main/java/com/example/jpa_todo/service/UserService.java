@@ -54,6 +54,7 @@ public class UserService {
         findUser.updatePassword(passwordEncoder.encode(newPassword));
     }
 
+    @Transactional
     public void delete(Long id, Long sessionId) {
         User findUser = findByIdOrElseThrow(id);
 

@@ -53,6 +53,7 @@ public class ScheduleService {
         findSchedule.updateTitleAndContents(title, contents);
     }
 
+    @Transactional
     public void delete(Long id, Long sessionId) {
         Schedule findSchedule = findByIdOrElseThrow(id);
         if (!findSchedule.getUser().getId().equals(sessionId)) {

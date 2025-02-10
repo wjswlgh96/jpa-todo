@@ -59,6 +59,7 @@ public class CommentService {
         findComment.updateContents(contents);
     }
 
+    @Transactional
     public void delete(Long sessionId, Long id) {
         Comment findComment = findByIdOrElseThrow(id);
 
