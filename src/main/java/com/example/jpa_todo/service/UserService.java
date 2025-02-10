@@ -65,6 +65,10 @@ public class UserService {
         userRepository.delete(findUser);
     }
 
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
     public User findByIdOrElseThrow(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new ApplicationException(HttpStatus.NOT_FOUND, "해당 아이디의 유저가 없습니다 id = " + id));

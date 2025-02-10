@@ -16,6 +16,10 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     public UserResponseDto signUp(String username, String email, String password) {
+        if (userService.existsByEmail(email)) {
+            throw new ApplicationException(HttpStatus.CONFLICT, "이미 사용 중인 이메일입니다.");
+        }
+
         User user = new User(username, email, passwordEncoder.encode(password));
         User savedUser = userService.save(user);
         return UserResponseDto.toDto(savedUser);
