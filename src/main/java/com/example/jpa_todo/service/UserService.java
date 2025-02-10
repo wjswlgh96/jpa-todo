@@ -19,6 +19,10 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    public User save(User user) {
+        return userRepository.save(user);
+    }
+
     public List<UserResponseDto> findAll() {
         return userRepository.findAll()
                 .stream()
@@ -27,13 +31,13 @@ public class UserService {
     }
 
     public UserResponseDto findById(Long id) {
-        User findUser = userRepository.findByIdOrElseThrow(id);
+        User findUser = findByIdOrElseThrow(id);
         return UserResponseDto.toDto(findUser);
     }
 
     @Transactional
     public void updatePassword(Long id, Long sessionId, String oldPassword, String newPassword) {
-        User findUser = userRepository.findByIdOrElseThrow(id);
+        User findUser = findByIdOrElseThrow(id);
 
         if (!findUser.getId().equals(sessionId)) {
             throw new ApplicationException(HttpStatus.FORBIDDEN, "자신의 비밀번호만 변경할 수 있습니다.");
@@ -51,12 +55,22 @@ public class UserService {
     }
 
     public void delete(Long id, Long sessionId) {
-        User findUser = userRepository.findByIdOrElseThrow(id);
+        User findUser = findByIdOrElseThrow(id);
 
         if (!findUser.getId().equals(sessionId)) {
             throw new ApplicationException(HttpStatus.FORBIDDEN, "자기 자신만 삭제할 수 있습니다.");
         }
 
         userRepository.delete(findUser);
+    }
+
+    public User findByIdOrElseThrow(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ApplicationException(HttpStatus.NOT_FOUND, "해당 아이디의 유저가 없습니다 id = " + id));
+    }
+
+    public User findByEmailOrThrow(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new ApplicationException(HttpStatus.UNAUTHORIZED, "해당 이메일의 유저가 존재하지 않습니다 email = " + email));
     }
 }

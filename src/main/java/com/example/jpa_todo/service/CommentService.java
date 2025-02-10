@@ -6,8 +6,6 @@ import com.example.jpa_todo.entity.Schedule;
 import com.example.jpa_todo.entity.User;
 import com.example.jpa_todo.exception.ApplicationException;
 import com.example.jpa_todo.repository.CommentRepository;
-import com.example.jpa_todo.repository.ScheduleRepository;
-import com.example.jpa_todo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,13 +19,14 @@ import java.util.List;
 public class CommentService {
 
     private final CommentRepository commentRepository;
-    private final UserRepository userRepository;
-    private final ScheduleRepository scheduleRepository;
+
+    private final UserService userService;
+    private final ScheduleService scheduleService;
 
 
     public CommentResponseDto save(Long sessionId, Long scheduleId, String contents) {
-        User findUser = userRepository.findByIdOrElseThrow(sessionId);
-        Schedule findSchedule = scheduleRepository.findByIdOrElseThrow(scheduleId);
+        User findUser = userService.findByIdOrElseThrow(sessionId);
+        Schedule findSchedule = scheduleService.findByIdOrElseThrow(scheduleId);
 
         Comment comment = new Comment(contents);
         findUser.addComment(comment);
@@ -45,13 +44,13 @@ public class CommentService {
     }
 
     public CommentResponseDto findById(Long id) {
-        Comment findComment = commentRepository.findByIdOrElseThrow(id);
+        Comment findComment = findByIdOrElseThrow(id);
         return CommentResponseDto.toDto(findComment);
     }
 
     @Transactional
     public void updateContents(Long sessionId, Long id, String contents) {
-        Comment findComment = commentRepository.findByIdOrElseThrow(id);
+        Comment findComment = findByIdOrElseThrow(id);
 
         if (!findComment.getUser().getId().equals(sessionId)) {
             throw new ApplicationException(HttpStatus.FORBIDDEN, "자신이 작성한 댓글만 수정이 가능합니다.");
@@ -61,7 +60,7 @@ public class CommentService {
     }
 
     public void delete(Long sessionId, Long id) {
-        Comment findComment = commentRepository.findByIdOrElseThrow(id);
+        Comment findComment = findByIdOrElseThrow(id);
 
         if (!findComment.getUser().getId().equals(sessionId)) {
             throw new ApplicationException(HttpStatus.FORBIDDEN, "자신이 작성한 댓글만 삭제가 가능합니다");
@@ -70,4 +69,8 @@ public class CommentService {
         commentRepository.delete(findComment);
     }
 
+    public Comment findByIdOrElseThrow(Long id) {
+        return commentRepository.findById(id)
+                .orElseThrow(() -> new ApplicationException(HttpStatus.NOT_FOUND, "해당 아이디의 댓글이 없습니다 id = " + id));
+    }
 }
