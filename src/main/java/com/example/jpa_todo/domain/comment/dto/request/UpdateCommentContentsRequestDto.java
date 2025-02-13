@@ -12,9 +12,6 @@ public class UpdateCommentContentsRequestDto {
     @Size(max = 100, message = "댓글은 100글자를 넘길 수 없습니다.")
     @Schema(description = "댓글 내용 입력 (필수, 최대 100자)", example = "수정된 댓글 내용입니다!!")
 
-    private final String contents;
+    private String contents;
 
-    public UpdateCommentContentsRequestDto(String contents) {
-        this.contents = contents;
-    }
 }
