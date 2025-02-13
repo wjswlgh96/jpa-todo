@@ -3,7 +3,7 @@ package com.example.jpa_todo.domain.comment.controller;
 import com.example.jpa_todo.common.utils.SessionUtil;
 import com.example.jpa_todo.domain.comment.dto.request.CreateCommentRequestDto;
 import com.example.jpa_todo.domain.comment.dto.request.UpdateCommentContentsRequestDto;
-import com.example.jpa_todo.domain.comment.dto.request.CommentResponseDto;
+import com.example.jpa_todo.domain.comment.dto.response.CommentResponseDto;
 import com.example.jpa_todo.domain.user.dto.response.UserResponseDto;
 import com.example.jpa_todo.domain.comment.service.CommentService;
 import io.swagger.v3.oas.annotations.Operation;

@@ -2,7 +2,7 @@ package com.example.jpa_todo.domain.comment.service;
 
 import com.example.jpa_todo.domain.schedule.service.ScheduleService;
 import com.example.jpa_todo.domain.user.service.UserService;
-import com.example.jpa_todo.domain.comment.dto.request.CommentResponseDto;
+import com.example.jpa_todo.domain.comment.dto.response.CommentResponseDto;
 import com.example.jpa_todo.domain.comment.entity.Comment;
 import com.example.jpa_todo.domain.schedule.entity.Schedule;
 import com.example.jpa_todo.domain.user.entity.User;

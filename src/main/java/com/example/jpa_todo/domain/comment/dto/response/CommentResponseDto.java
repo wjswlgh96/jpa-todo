@@ -1,4 +1,4 @@
-package com.example.jpa_todo.domain.comment.dto.request;
+package com.example.jpa_todo.domain.comment.dto.response;
 
 import com.example.jpa_todo.domain.comment.entity.Comment;
 import io.swagger.v3.oas.annotations.media.Schema;
