@@ -26,7 +26,7 @@ public class CommentService {
     private final ScheduleService scheduleService;
 
     @Transactional
-    public CommentResponseDto save(Long sessionId, Long scheduleId, String contents) {
+    public CommentResponseDto createComment(Long sessionId, Long scheduleId, String contents) {
         User findUser = userService.findByIdOrElseThrow(sessionId);
         Schedule findSchedule = scheduleService.findByIdOrElseThrow(scheduleId);
 
@@ -38,14 +38,14 @@ public class CommentService {
         return CommentResponseDto.toDto(comment);
     }
 
-    public List<CommentResponseDto> findAll() {
+    public List<CommentResponseDto> getComments() {
         return commentRepository.findAll()
                 .stream()
                 .map(CommentResponseDto::toDto)
                 .toList();
     }
 
-    public CommentResponseDto findById(Long id) {
+    public CommentResponseDto getCommentById(Long id) {
         Comment findComment = findByIdOrElseThrow(id);
         return CommentResponseDto.toDto(findComment);
     }
@@ -62,7 +62,7 @@ public class CommentService {
     }
 
     @Transactional
-    public void delete(Long sessionId, Long id) {
+    public void deleteComment(Long sessionId, Long id) {
         Comment findComment = findByIdOrElseThrow(id);
 
         if (!findComment.getUser().getId().equals(sessionId)) {

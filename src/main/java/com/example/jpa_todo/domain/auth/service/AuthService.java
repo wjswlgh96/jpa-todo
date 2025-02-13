@@ -24,7 +24,7 @@ public class AuthService {
         }
 
         User user = new User(username, email, passwordEncoder.encode(password));
-        User savedUser = userService.save(user);
+        User savedUser = userService.createUser(user);
         return UserResponseDto.toDto(savedUser);
     }
 

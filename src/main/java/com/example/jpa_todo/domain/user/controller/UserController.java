@@ -25,15 +25,15 @@ public class UserController {
 
     @GetMapping
     @Operation(summary = "모든 유저 조회", description = "회원 등록되어 있는 모든 유저를 조회합니다.")
-    public ResponseEntity<List<UserResponseDto>> findAll() {
-        List<UserResponseDto> responseDto = userService.findAll();
+    public ResponseEntity<List<UserResponseDto>> getUsers() {
+        List<UserResponseDto> responseDto = userService.getUsers();
         return ResponseEntity.ok(responseDto);
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "특정 유저 조회", description = "회원 등록되어 있는 특정 유저를 조회합니다.")
-    public ResponseEntity<UserResponseDto> findById(@PathVariable Long id) {
-        UserResponseDto responseDto = userService.findById(id);
+    public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long id) {
+        UserResponseDto responseDto = userService.getUserById(id);
         return ResponseEntity.ok(responseDto);
     }
 
@@ -51,12 +51,12 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "회원 삭제(회원 탈퇴)", description = "특정 회원의 정보를 삭제합니다.")
-    public ResponseEntity<Map<String, String>> delete(
+    public ResponseEntity<Map<String, String>> deleteUser(
             @PathVariable Long id,
             HttpServletRequest request
     ) {
         UserResponseDto sessionUser = SessionUtil.getSessionUser(request);
-        userService.delete(id, sessionUser.getId());
+        userService.deleteUser(id, sessionUser.getId());
         return SessionUtil.expireSessionWithMessage(request, "회원 탈퇴가 정상적으로 처리되었습니다.");
     }
 }

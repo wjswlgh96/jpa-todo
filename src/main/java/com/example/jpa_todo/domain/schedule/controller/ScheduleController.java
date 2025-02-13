@@ -28,31 +28,31 @@ public class ScheduleController {
 
     @PostMapping
     @Operation(summary = "할일 등록", description = "현재 로그인되어 있는 유저의 ID로 할일을 새로 생성합니다.")
-    public ResponseEntity<ScheduleResponseDto> save(
+    public ResponseEntity<ScheduleResponseDto> createSchedule(
             @Valid @RequestBody CreateScheduleRequestDto requestDto,
             HttpServletRequest request
     ) {
         UserResponseDto sessionUser = SessionUtil.getSessionUser(request);
-        ScheduleResponseDto responseDto = scheduleService.save(sessionUser.getId(), requestDto.getTitle(), requestDto.getContents());
+        ScheduleResponseDto responseDto = scheduleService.createSchedule(sessionUser.getId(), requestDto.getTitle(), requestDto.getContents());
         return ResponseEntity.ok(responseDto);
     }
 
     @GetMapping
     @Operation(summary = "모든 할일 조회", description = "현재 등록되어 있는 모든 할일 목록을 조회합니다. 페이지네이션 형식입니다.")
-    public ResponseEntity<SchedulePageResponseDto<ScheduleResponseDto>> findAll(
+    public ResponseEntity<SchedulePageResponseDto<ScheduleResponseDto>> getSchedules(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "modifiedAt") String sort
     ) {
         Pageable pageable = PageRequest.of(Math.max(0, page - 1), size, Sort.by(sort).descending());
-        SchedulePageResponseDto<ScheduleResponseDto> responseDto = scheduleService.findAll(pageable);
+        SchedulePageResponseDto<ScheduleResponseDto> responseDto = scheduleService.getSchedules(pageable);
         return ResponseEntity.ok(responseDto);
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "특정 할일 조회", description = "현재 등록되어 있는 할일중에 특정 할일을 조회합니다.")
-    public ResponseEntity<ScheduleResponseDto> findById(@PathVariable Long id) {
-        ScheduleResponseDto responseDto = scheduleService.findById(id);
+    public ResponseEntity<ScheduleResponseDto> getScheduleById(@PathVariable Long id) {
+        ScheduleResponseDto responseDto = scheduleService.getScheduleById(id);
         return ResponseEntity.ok(responseDto);
     }
 
@@ -70,12 +70,12 @@ public class ScheduleController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "특정 할일 삭제", description = "등록되어 있는 특정 할일을 삭제합니다.")
-    public ResponseEntity<Void> delete(
+    public ResponseEntity<Void> deleteSchedule(
             @PathVariable Long id,
             HttpServletRequest request
     ) {
         UserResponseDto sessionUser = SessionUtil.getSessionUser(request);
-        scheduleService.delete(id, sessionUser.getId());
+        scheduleService.deleteSchedule(id, sessionUser.getId());
         return ResponseEntity.ok().build();
     }
 

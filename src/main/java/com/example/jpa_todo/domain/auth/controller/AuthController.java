@@ -45,7 +45,7 @@ public class AuthController {
             HttpServletRequest request
     ) {
         UserResponseDto user = authService.login(requestDto.getEmail(), requestDto.getPassword());
-        HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession(false);    // false 를 사용하여 session 이 없을 시 null 반환
         if (session != null && session.getAttribute(Const.LOGIN_USER) != null) {
             throw new ApplicationException(HttpStatus.BAD_REQUEST, "이미 로그인된 상태입니다.");
         }
@@ -62,6 +62,7 @@ public class AuthController {
         if (session != null) {
             session.invalidate();
         }
+
         return ResponseEntity.ok().build();
     }
 }

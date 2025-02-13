@@ -19,18 +19,18 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public User save(User user) {
+    public User createUser(User user) {
         return userRepository.save(user);
     }
 
-    public List<UserResponseDto> findAll() {
+    public List<UserResponseDto> getUsers() {
         return userRepository.findAll()
                 .stream()
                 .map(UserResponseDto::toDto)
                 .toList();
     }
 
-    public UserResponseDto findById(Long id) {
+    public UserResponseDto getUserById(Long id) {
         User findUser = findByIdOrElseThrow(id);
         return UserResponseDto.toDto(findUser);
     }
@@ -55,7 +55,7 @@ public class UserService {
     }
 
     @Transactional
-    public void delete(Long id, Long sessionId) {
+    public void deleteUser(Long id, Long sessionId) {
         User findUser = findByIdOrElseThrow(id);
 
         if (!findUser.getId().equals(sessionId)) {

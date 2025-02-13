@@ -15,6 +15,7 @@ public final class SessionUtil {    // final: 상속 방지
 
     private SessionUtil() {}    // 인스턴스화 방지
 
+    // 현재 로그인된 유저의 세션 가져오는 메서드
     public static UserResponseDto getSessionUser(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session == null) {
@@ -29,6 +30,7 @@ public final class SessionUtil {    // final: 상속 방지
         return sessionUser;
     }
 
+    // 세션 만료 시키는 메서드
     public static ResponseEntity<Map<String, String>> expireSessionWithMessage(HttpServletRequest request, String message) {
         HttpSession session = request.getSession(false);
         if (session != null) {

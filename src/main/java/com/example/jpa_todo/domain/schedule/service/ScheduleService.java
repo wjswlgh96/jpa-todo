@@ -23,7 +23,7 @@ public class ScheduleService {
     private final UserService userService;
 
     @Transactional
-    public ScheduleResponseDto save(Long userId, String title, String contents) {
+    public ScheduleResponseDto createSchedule(Long userId, String title, String contents) {
         User findUser = userService.findByIdOrElseThrow(userId);
         Schedule saveSchedule = new Schedule(title, contents);
 
@@ -33,14 +33,14 @@ public class ScheduleService {
         return ScheduleResponseDto.toDto(saveSchedule);
     }
 
-    public SchedulePageResponseDto<ScheduleResponseDto> findAll(Pageable pageable) {
+    public SchedulePageResponseDto<ScheduleResponseDto> getSchedules(Pageable pageable) {
         Page<ScheduleResponseDto> dtoPage = scheduleRepository.findAll(pageable)
                 .map(ScheduleResponseDto::toDto);
 
         return SchedulePageResponseDto.toDto(dtoPage);
     }
 
-    public ScheduleResponseDto findById(Long id) {
+    public ScheduleResponseDto getScheduleById(Long id) {
         Schedule findSchedule = findByIdOrElseThrow(id);
         return ScheduleResponseDto.toDto(findSchedule);
     }
@@ -56,7 +56,7 @@ public class ScheduleService {
     }
 
     @Transactional
-    public void delete(Long id, Long sessionId) {
+    public void deleteSchedule(Long id, Long sessionId) {
         Schedule findSchedule = findByIdOrElseThrow(id);
         if (!findSchedule.getUser().getId().equals(sessionId)) {
             throw new ApplicationException(HttpStatus.FORBIDDEN, "스케줄 작성자만 삭제가 가능합니다.");
